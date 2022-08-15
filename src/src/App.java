@@ -143,11 +143,7 @@ public class App {
             while ((s = stdInput.readLine()) != null) {
                 output.add(s);
             }
-        } catch (IOException e) {
-            return "failed to run command";
-        }
 
-        try {
             if (output.get(3).contains("RUNNING"))
                 return "RUNNING";
             else if (output.get(3).contains("STOPPED"))
@@ -156,6 +152,9 @@ public class App {
                 return "PENDING - will start on next boot";
             else if (output.get(3).contains("PAUSED"))
                 return "PAUSED";
+
+        } catch (IOException e) {
+            return "failed to run command";
         } catch (IndexOutOfBoundsException e) {
             //noinspection UnnecessarySemicolon
             ;
