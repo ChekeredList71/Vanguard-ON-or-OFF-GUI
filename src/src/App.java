@@ -52,7 +52,7 @@ public class App {
     public static void startVanguard() {
 
         // check for admin
-        if (WindowsAdminUtil.isUserWindowsAdmin()) { // TODO: Test startVanguard() with admin rights
+        if (WindowsAdminUtil.isUserWindowsAdmin()) {
             try {
                 String[] commands = {"sc config vgc start= demand", "sc config vgk start= system"};
                 cmdRunner.run(commands);
@@ -81,7 +81,7 @@ public class App {
     }
 
     public static void stopVanguard() {
-        if (WindowsAdminUtil.isUserWindowsAdmin()) { // TODO: Test stopVanguard() with admin rights
+        if (WindowsAdminUtil.isUserWindowsAdmin()) {
             try {
                 String[] commands = {"sc config vgc start= disabled", "sc config vgk start= disabled", "net stop vgc",
                         "net stop vgk", "taskkill /IM vgtray.exe"};
