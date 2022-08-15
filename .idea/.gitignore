@@ -1,3 +1,10 @@
 # Default ignored files
 /shelf/
 /workspace.xml
+/artifacts/
+/libraries/
+/discord.xml
+/misc.xml
+/modules.xml
+/uiDesigner.xml
+/vcs.xml
