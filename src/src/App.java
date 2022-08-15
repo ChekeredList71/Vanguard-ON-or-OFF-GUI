@@ -5,15 +5,13 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.Locale;
 
 public class App {
-    public static void main(String[] args) {
+    static JFrame f = new JFrame();
 
+    public static void main(String[] args) {
         startGUI();
     }
-
-    static JFrame f = new JFrame();
 
     public static void startGUI() {
 
@@ -24,12 +22,13 @@ public class App {
         JButton startV = new JButton("Enable startup");
         JButton stopV = new JButton("Disable startup");
         JButton killV = new JButton("Kill Vanguard process");
-        JLabel vanguardStatus = new JLabel("Vanguard status: " + getVanguardStatus());
+        String vState = getVanguardStatus();
+        JLabel vanguardStatus = new JLabel("Vanguard status: " + vState);
 
         startV.setBounds(10, 10, 120, 40);
         stopV.setBounds(140, 10, 120, 40);
         killV.setBounds(270, 10, 160, 40);
-        vanguardStatus.setBounds(10, 60, 300, 40);
+        vanguardStatus.setBounds(10, 70, 380, 40);
 
         f.add(startV);
         f.add(stopV);
@@ -101,6 +100,7 @@ public class App {
     }
 
     public static void killVanguard() {
+
         if (WindowsAdminUtil.isUserWindowsAdmin()) {
             try {
                 String[] commands = {"net stop vgc",
@@ -123,7 +123,7 @@ public class App {
 
     public static String getVanguardStatus() {
 
-        ArrayList<String> output = new ArrayList<>();
+        ArrayList<String> output = new ArrayList<>(); //TODO: check if vgk and vgc is running separately
         try {
             Runtime rt = Runtime.getRuntime();
             String[] commands = {"sc", "query", "vgk"};
@@ -142,22 +142,16 @@ public class App {
             System.exit(0);
         }
 
-        if (Locale.getDefault().toString().contains("EN")) {
-            return "failed to check due to non english OS";
-        }
+        if (output.contains("RUNNING"))
+            return "RUNNING";
+        else if (output.get(3).contains("STOPPED"))
+            return "STOPPED";
+        else if (output.get(3).contains("START_PENDING"))
+            return "PENDING - will start on next boot";
+        else if (output.get(3).contains("PAUSED"))
+            return "PAUSED";
 
-        try {
-            if (Integer.parseInt(output.get(3).substring(29, 30)) == 4) // get the number from cmd output example: " STATE :
-                // 1 STOPPED"
-                return "RUNNING";
-            else if (Integer.parseInt(output.get(3).substring(29, 30)) == 1)
-                return "STOPPED";
-        } catch (StringIndexOutOfBoundsException e) {
-            //noinspection UnnecessarySemicolon
-            ;
-        }
-
-        return "failed to check";
+        return "failed to check, probably due to non english cmd";
     }
 }
 
