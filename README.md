@@ -1,10 +1,10 @@
 ## Vanguard ON or OFF Java GUI program
 
-This is a GUI app made for studying Java. Basically this is a fancy interface for running commands to stop, disable or enable Valorant Vanguard.
+This is a GUI app made for controlling Vanguard. It's a fancy interface for running commands to stop, disable or enable it.
 
 ## Support
 
-Obviously only works on Windows. 
+Obviously only works on Windows. If your Command Prompt language is not English, the app will fail to check the status of the Vanguard service.
 
 ## Based on
 
