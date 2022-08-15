@@ -1,6 +1,5 @@
 package src;
 
-
 import com.sun.jna.LastErrorException;
 import com.sun.jna.Native;
 import com.sun.jna.Platform;
