@@ -1,6 +1,10 @@
 ## Vanguard ON or OFF Java GUI program
 
-This is a GUI app made for studying Java. Basically this is a fancy interface for running commands.
+This is a GUI app made for studying Java. Basically this is a fancy interface for running commands to stop, disable or enable Valorant Vanguard.
+
+## Support
+
+Obviously only works on Windows. 
 
 ## Based on
 
