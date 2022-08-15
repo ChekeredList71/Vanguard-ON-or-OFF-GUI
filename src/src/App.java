@@ -7,7 +7,7 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 
 public class App {
-    static JFrame f = new JFrame();
+    static final JFrame f = new JFrame();
 
     public static void main(String[] args) {
         startGUI();
@@ -58,17 +58,20 @@ public class App {
 
             } catch (IOException e) {
 
-                JOptionPane.showMessageDialog(f, "IOException occurred lmao", "Error", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(f, "IOException occurred lmao", "Error",
+                        JOptionPane.ERROR_MESSAGE);
                 System.exit(0);
             }
             //Ask if user wants to restart
-            if (JOptionPane.showConfirmDialog(f, "Vanguard will start on next powerup. Restart now?", "Success",
+            if (JOptionPane.showConfirmDialog(f, "Vanguard will start on next powerup. Restart now?",
+                    "Success",
                     JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
                 try {
                     Process proc = Runtime.getRuntime().exec("shutdown -r -t 0");
                     proc.destroy();
                 } catch (IOException e) {
-                    JOptionPane.showMessageDialog(f, "IOException occurred lmao", "Error", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(f, "IOException occurred lmao", "Error", JOptionPane.
+                            ERROR_MESSAGE);
                     System.exit(0);
                 }
             }
@@ -85,7 +88,8 @@ public class App {
                 String[] commands = {"sc config vgc start= disabled", "sc config vgk start= disabled", "net stop vgc",
                         "net stop vgk", "taskkill /IM vgtray.exe"};
                 cmdRunner.run(commands);
-                JOptionPane.showMessageDialog(f, "Vanguard process is terminated, and it won't start next time.", "Success", JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(f, "Vanguard process is terminated, and it won't start next time."
+                        , "Success", JOptionPane.INFORMATION_MESSAGE);
 
             } catch (IOException e) {
 
@@ -97,6 +101,7 @@ public class App {
             JOptionPane.showMessageDialog(f, "This command cannot run without admin rights. Restart app as admin.",
                     "Error", JOptionPane.ERROR_MESSAGE);
         }
+        getVanguardStatus();
     }
 
     public static void killVanguard() {
@@ -107,10 +112,12 @@ public class App {
                         "net stop vgk", "taskkill /IM vgtray.exe"};
 
                 cmdRunner.run(commands);
-                JOptionPane.showMessageDialog(f, "Vanguard process is terminated.", "Success", JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(f, "Vanguard process is terminated.", "Success",
+                        JOptionPane.INFORMATION_MESSAGE);
             } catch (IOException e) {
 
-                JOptionPane.showMessageDialog(f, "IOException occurred lmao", "Error", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(f, "IOException occurred lmao", "Error", JOptionPane.
+                        ERROR_MESSAGE);
                 System.exit(0);
             }
         } else {
@@ -137,22 +144,23 @@ public class App {
                 output.add(s);
             }
         } catch (IOException e) {
-
-            JOptionPane.showMessageDialog(f, "IOException occurred lmao", "Error", JOptionPane.ERROR_MESSAGE);
-            System.exit(0);
+            return "failed to run command";
         }
 
-        if (output.contains("RUNNING"))
-            return "RUNNING";
-        else if (output.get(3).contains("STOPPED"))
-            return "STOPPED";
-        else if (output.get(3).contains("START_PENDING"))
-            return "PENDING - will start on next boot";
-        else if (output.get(3).contains("PAUSED"))
-            return "PAUSED";
+        try {
+            if (output.get(3).contains("RUNNING"))
+                return "RUNNING";
+            else if (output.get(3).contains("STOPPED"))
+                return "STOPPED";
+            else if (output.get(3).contains("START_PENDING"))
+                return "PENDING - will start on next boot";
+            else if (output.get(3).contains("PAUSED"))
+                return "PAUSED";
+        } catch (IndexOutOfBoundsException e) {
+            //noinspection UnnecessarySemicolon
+            ;
+        }
 
         return "failed to check, probably due to non english cmd";
     }
 }
-
-//TODO: check for Windows platform

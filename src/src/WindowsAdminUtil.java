@@ -13,7 +13,7 @@ public class WindowsAdminUtil {
       boolean IsUserAnAdmin() throws LastErrorException;
    }
 
-   public static final Shell32 INSTANCE = Platform.isWindows() ? (Shell32) Native.loadLibrary("shell32", Shell32.class)
+   public static final Shell32 INSTANCE = Platform.isWindows() ? Native.load("shell32", Shell32.class)
          : null;
 
    public static boolean isUserWindowsAdmin() {
