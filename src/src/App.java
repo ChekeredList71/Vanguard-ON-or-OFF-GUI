@@ -7,6 +7,7 @@ import java.util.ArrayList;
 public class App {
     static final JFrame f = new JFrame();
     static JLabel vanguardStatus;
+
     public static void main(String[] args) {
         startGUI();
     }
@@ -20,7 +21,7 @@ public class App {
         JButton startV = new JButton("Enable startup");
         JButton stopV = new JButton("Disable startup");
         JButton killV = new JButton("Kill Vanguard process");
-        vanguardStatus = new JLabel("<html>"+"Vanguard status: " + getVanguardStatus() + "</html>");
+        vanguardStatus = new JLabel("<html>" + "Vanguard status: " + getVanguardStatus() + "</html>");
 
         startV.setBounds(10, 10, 120, 40);
         stopV.setBounds(140, 10, 120, 40);
@@ -86,7 +87,7 @@ public class App {
                         "net stop vgk", "taskkill /IM vgtray.exe"};
                 cmdRunner.run(commands); //TODO: add if statement to check if vanguard died. Use: getVanguardStatus()
                 JOptionPane.showMessageDialog(f, "Vanguard service is terminated, and it won't start next time." +
-                                "\nNote: the tray icon will still appear.", "Success", JOptionPane.INFORMATION_MESSAGE);
+                        "\nNote: the tray icon will still appear.", "Success", JOptionPane.INFORMATION_MESSAGE);
 
             } catch (IOException e) {
 
@@ -110,7 +111,7 @@ public class App {
 
                 cmdRunner.run(commands);
                 JOptionPane.showMessageDialog(f, "Vanguard process is terminated. It will still start on next " +
-                                "powerup.", "Success", JOptionPane.INFORMATION_MESSAGE);
+                        "powerup.", "Success", JOptionPane.INFORMATION_MESSAGE);
             } catch (IOException e) {
 
                 JOptionPane.showMessageDialog(f, "IOException occurred lmao", "Error", JOptionPane.
@@ -132,17 +133,17 @@ public class App {
             ArrayList<String> outputVgc = cmdRunner.run("sc query vgc");
 
             String vgkStatus =
-                outputVgk.get(3).contains("RUNNING") ? "RUNNING"
-                : outputVgk.get(3).contains("STOPPED") ? "STOPPED"
-                : outputVgk.get(3).contains("START_PENDING") ? "START_PENDING"
-                : "fail";
+                    outputVgk.get(3).contains("RUNNING") ? "RUNNING"
+                            : outputVgk.get(3).contains("STOPPED") ? "STOPPED"
+                            : outputVgk.get(3).contains("START_PENDING") ? "START_PENDING"
+                            : "fail";
 
             String vgcStatus =
-                outputVgc.get(3).contains("RUNNING") ? "RUNNING"
-                : outputVgc.get(3).contains("STOPPED") ? "STOPPED"
-                : outputVgc.get(3).contains("PAUSED") ? "PAUSED"
-                : outputVgc.get(3).contains("START_PENDING") ? "START_PENDING"
-                : "fail";
+                    outputVgc.get(3).contains("RUNNING") ? "RUNNING"
+                            : outputVgc.get(3).contains("STOPPED") ? "STOPPED"
+                            : outputVgc.get(3).contains("PAUSED") ? "PAUSED"
+                            : outputVgc.get(3).contains("START_PENDING") ? "START_PENDING"
+                            : "fail";
 
             if (vgkStatus.equals("RUNNING") && vgcStatus.equals("RUNNING")) {
                 return "RUNNING";
