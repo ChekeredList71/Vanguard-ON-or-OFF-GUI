@@ -1,6 +1,6 @@
 # Default ignored files
 /shelf/
-/workspace.xml
+/.idea/workspace.xml
 /artifacts/
 /libraries/
 /discord.xml
@@ -8,3 +8,6 @@
 /modules.xml
 /uiDesigner.xml
 /vcs.xml
+/.idea/artifacts/app.xml
+/.idea/libraries/net_java_dev_jna.xml
+/.idea/discord.xml
