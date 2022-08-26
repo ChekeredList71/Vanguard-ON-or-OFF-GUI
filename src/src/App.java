@@ -20,12 +20,12 @@ public class App {
         JButton startV = new JButton("Enable startup");
         JButton stopV = new JButton("Disable startup");
         JButton killV = new JButton("Kill Vanguard process");
-        vanguardStatus = new JLabel("Vanguard status: " + getVanguardStatus());
+        vanguardStatus = new JLabel("<html>"+"Vanguard status: " + getVanguardStatus() + "</html>");
 
         startV.setBounds(10, 10, 120, 40);
         stopV.setBounds(140, 10, 120, 40);
         killV.setBounds(270, 10, 160, 40);
-        vanguardStatus.setBounds(10, 70, 380, 40);
+        vanguardStatus.setBounds(10, 70, 380, 55);
 
         f.add(startV);
         f.add(stopV);
@@ -76,7 +76,7 @@ public class App {
             JOptionPane.showMessageDialog(f, "This command cannot run without admin rights. Restart app as admin.",
                     "Error", JOptionPane.ERROR_MESSAGE);
         }
-        vanguardStatus.setText("Vanguard status: " + getVanguardStatus());
+        vanguardStatus.setText("<html>" + "Vanguard status: " + getVanguardStatus() + "</html>");
     }
 
     public static void stopVanguard() {
@@ -98,7 +98,7 @@ public class App {
             JOptionPane.showMessageDialog(f, "This command cannot run without admin rights. Restart app as admin.",
                     "Error", JOptionPane.ERROR_MESSAGE);
         }
-        vanguardStatus.setText("Vanguard status: " + getVanguardStatus());
+        vanguardStatus.setText("<html>" + "Vanguard status: " + getVanguardStatus() + "</html>");
     }
 
     public static void killVanguard() {
@@ -122,22 +122,37 @@ public class App {
                     "Error", JOptionPane.ERROR_MESSAGE);
         }
 
-        vanguardStatus.setText("Vanguard status: " + getVanguardStatus());
+        vanguardStatus.setText("<html>" + "Vanguard status: " + getVanguardStatus() + "</html>");
     }
 
     public static String getVanguardStatus() {
 
         try {
-            ArrayList<String> output = cmdRunner.run("sc query vgk");
+            ArrayList<String> outputVgk = cmdRunner.run("sc query vgk");
+            ArrayList<String> outputVgc = cmdRunner.run("sc query vgc");
 
-            if (output.get(3).contains("RUNNING"))
+            String vgkStatus =
+                outputVgk.get(3).contains("RUNNING") ? "RUNNING"
+                : outputVgk.get(3).contains("STOPPED") ? "STOPPED"
+                : outputVgk.get(3).contains("START_PENDING") ? "START_PENDING"
+                : "fail";
+
+            String vgcStatus =
+                outputVgc.get(3).contains("RUNNING") ? "RUNNING"
+                : outputVgc.get(3).contains("STOPPED") ? "STOPPED"
+                : outputVgc.get(3).contains("PAUSED") ? "PAUSED"
+                : outputVgc.get(3).contains("START_PENDING") ? "START_PENDING"
+                : "fail";
+
+            if (vgkStatus.equals("RUNNING") && vgcStatus.equals("RUNNING")) {
                 return "RUNNING";
-            else if (output.get(3).contains("STOPPED"))
+            } else if (vgkStatus.equals("STOPPED") && vgcStatus.equals("STOPPED")) {
                 return "STOPPED";
-            else if (output.get(3).contains("START_PENDING"))
-                return "PENDING - will start on next power up";
-            else if (output.get(3).contains("PAUSED"))
-                return "PAUSED";
+            } else if (vgkStatus.equals("START_PENDING") && vgcStatus.equals("START_PENDING")) {
+                return "START_PENDING";
+            } else if (!(vgkStatus.equals("fail") && vgcStatus.equals("fail"))) {
+                return String.format("NOT RUNNING PROPERLY<br/>vgk service: %s<br/>vgc service: %s", vgkStatus, vgcStatus);
+            }
 
         } catch (IOException e) {
             return "failed to run command";
