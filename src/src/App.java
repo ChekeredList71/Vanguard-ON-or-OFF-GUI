@@ -157,10 +157,7 @@ public class App {
 
         } catch (IOException e) {
             return "failed to run command";
-        } catch (IndexOutOfBoundsException e) {
-            //noinspection UnnecessarySemicolon
-            ;
-        }
+        } catch (IndexOutOfBoundsException ignored) {}
         return "failed to check, probably due to non english cmd";
     }
 }
