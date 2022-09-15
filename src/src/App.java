@@ -130,7 +130,6 @@ public class App {
 
         try {
             ArrayList<String> outputVgk = cmdRunner.run("sc query vgk");
-            ArrayList<String> outputVgc = cmdRunner.run("sc query vgc");
 
             String vgkStatus =
                     outputVgk.get(3).contains("RUNNING") ? "RUNNING"
@@ -138,22 +137,15 @@ public class App {
                             : outputVgk.get(3).contains("START_PENDING") ? "START_PENDING"
                             : "fail";
 
-            String vgcStatus =
-                    outputVgc.get(3).contains("RUNNING") ? "RUNNING"
-                            : outputVgc.get(3).contains("STOPPED") ? "STOPPED"
-                            : outputVgc.get(3).contains("PAUSED") ? "PAUSED"
-                            : outputVgc.get(3).contains("START_PENDING") ? "START_PENDING"
-                            : "fail";
-
-            if (vgkStatus.equals("RUNNING") && vgcStatus.equals("RUNNING")) {
-                return "RUNNING";
-            } else if (vgkStatus.equals("STOPPED") && vgcStatus.equals("STOPPED")) {
-                return "STOPPED";
-            } else if (vgkStatus.equals("START_PENDING") && vgcStatus.equals("START_PENDING")) {
-                return "START_PENDING";
-            } else if (!(vgkStatus.equals("fail") && vgcStatus.equals("fail"))) {
-                return String.format("NOT RUNNING PROPERLY<br/>vgk service: %s<br/>vgc service: %s", vgkStatus, vgcStatus);
+            switch (vgkStatus) {
+                case "RUNNING":
+                    return "RUNNING";
+                case "STOPPED":
+                    return "STOPPED";
+                case "START_PENDING":
+                    return "START_PENDING";
             }
+
 
         } catch (IOException e) {
             return "failed to run command";
